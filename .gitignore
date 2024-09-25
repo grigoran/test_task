@@ -1,1 +1,5 @@
 connection.txt
+build
+node_modules/
+knexfile.js
+src/config.ts
