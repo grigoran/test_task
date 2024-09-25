@@ -3,6 +3,8 @@ import { errorType, getRespSchema, userType } from "../Util/types";
 import * as userService from '../Service/UsersService'
 
 const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
+
+    /** Создание пользователя */
     server.post('/create', {
         schema: {
             body: Type.Object({
@@ -30,7 +32,7 @@ const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
         }
     });
 
-
+    /** Получить всех пользователей */
     server.get('/get', {
         schema: {
             response: {
@@ -52,6 +54,7 @@ const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
         }
     });
 
+    /** Получить одного пользователя */
     server.get('/get/:userId', {
         schema: {
             params: Type.Object({
@@ -74,6 +77,7 @@ const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
         }
     });
 
+    /** Обновить пользователя */
     server.patch('/update/:userId', {
         schema: {
             params: Type.Object({
@@ -107,6 +111,7 @@ const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
         }
     });
 
+    /** Удалить пользователя */
     server.delete('/delete/:userId', {
         schema: {
             params: Type.Object({
@@ -140,6 +145,7 @@ const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
         }
     });
 
+    /** Удалить всех пользователей */
     server.patch('/delete', {
         schema: {
             response: {
