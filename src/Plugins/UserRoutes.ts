@@ -146,7 +146,7 @@ const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
     });
 
     /** Удалить всех пользователей */
-    server.patch('/delete', {
+    server.delete('/delete', {
         schema: {
             response: {
                 '2xx': Type.Object({
