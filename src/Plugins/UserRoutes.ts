@@ -35,6 +35,11 @@ const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
     /** Получить всех пользователей */
     server.get('/get', {
         schema: {
+            querystring: Type.Object({
+                full_name: Type.Optional(Type.String()),
+                role: Type.Optional(Type.String()),
+                efficiency: Type.Optional(Type.Integer())
+            }),
             response: {
                 '2xx': getRespSchema({
                     users: Type.Array(userType)
@@ -44,7 +49,7 @@ const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
         }
     }, async (req, res) => {
 
-        const avUsers = await userService.listUsers();
+        const avUsers = await userService.listUsers([], req.query);
 
         return {
             success: true,
@@ -60,20 +65,27 @@ const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
             params: Type.Object({
                 userId: Type.Integer({ exclusiveMinimum: 0 })
             }),
+            querystring: Type.Object({
+                full_name: Type.Optional(Type.String()),
+                role: Type.Optional(Type.String()),
+                efficiency: Type.Optional(Type.Integer())
+            }),
             response: {
-                '2xx': getRespSchema(
-                    userType.properties
-                ),
+                '2xx': getRespSchema({
+                    users: Type.Array(userType)
+                }),
                 '4xx': errorType
             }
         }
     }, async (req, rep) => {
 
-        const [vUser] = await userService.listUsers([req.params.userId]);
+        const avUser = await userService.listUsers([req.params.userId], req.query);
 
         return {
             success: true,
-            result: vUser
+            result: {
+                users: avUser
+            }
         }
     });
 
@@ -116,11 +128,6 @@ const routesPlugin: FastifyPluginAsyncTypebox = async function (server) {
         schema: {
             params: Type.Object({
                 userId: Type.Integer({ exclusiveMinimum: 0 })
-            }),
-            body: Type.Object({
-                full_name: Type.Optional(Type.String()),
-                role: Type.Optional(Type.String()),
-                efficiency: Type.Optional(Type.Integer())
             }),
             response: {
                 '2xx': getRespSchema(

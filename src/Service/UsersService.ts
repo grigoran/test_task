@@ -13,12 +13,15 @@ export async function createUser(data: Partial<User>) {
 }
 
 /** Получить пользователей по списку id */
-export async function listUsers(aidUser?: number[]): Promise<User[]> {
+export async function listUsers(aidUser: number[], filter?: Partial<User>): Promise<User[]> {
     let res: User[] = [];
     try {
         const query = db<User>('users');
-        if (aidUser?.length) {
+        if (aidUser.length) {
             query.whereIn('id', aidUser);
+        }
+        if(filter) {
+            query.where(filter);
         }
         res = await query.select();
     } catch (e) {
